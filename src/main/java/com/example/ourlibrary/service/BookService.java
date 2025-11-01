@@ -31,12 +31,13 @@ public class BookService {
     }
 
     public Page<BookDTO> getAll(BookFilterDTO filter) {
-        Specification<Book> specification = Specification.unrestricted();
-                specification.and(StringUtils.isBlank(filter.getTitle()) ? null : BookSpecification.bookTitle(filter.getTitle()))
+        Specification<Book> specification = Specification.<Book>allOf()
+                        .and(StringUtils.isBlank(filter.getTitle()) ? null : BookSpecification.bookTitle(filter.getTitle()))
                 .and(StringUtils.isBlank(filter.getDescription()) ? null : BookSpecification.bookDescription(filter.getDescription()))
-                .and(StringUtils.isBlank(String.valueOf(filter.getPublicationYear())) ? null : BookSpecification.bookYear(filter.getPublicationYear()))
+                .and(filter.getPublicationYear() == null ? null : BookSpecification.bookYear(filter.getPublicationYear()))
                 .and(StringUtils.isBlank(filter.getAuthor()) ? null : BookSpecification.bookAuthor(filter.getAuthor()))
                 .and(StringUtils.isBlank(filter.getCategory()) ? null : BookSpecification.bookCategory(filter.getCategory()));
+
         var all = this.bookRepository.findAll(specification, filter.getPageable().withSort(Sort.by(Sort.Direction.DESC, "id")));
         var allDTO = all.stream().map(BookParse::builderToBookDTO).toList();
         return new PageImpl<>(allDTO, all.getPageable(), all.getTotalElements());

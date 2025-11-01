@@ -25,7 +25,7 @@ public class Book {
 
     private String description;
 
-    private int publicationYear;
+    private Integer publicationYear;
 
     private String image;
 
