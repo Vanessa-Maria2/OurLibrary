@@ -31,6 +31,6 @@ jobs:
           distribution: 'temurin' 
           java-version: '21'
           cache: 'maven'
-        run: |
+      - run: |
           mvn clean install -DskipTests
           mvn test
