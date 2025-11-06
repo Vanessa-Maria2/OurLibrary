@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 class BookServiceTest {
 
     @Autowired
@@ -45,6 +47,9 @@ class BookServiceTest {
 
         book = bookService.create(bookDTO);
 
+        Category category = new Category();
+        category.setName("Fiction");
+        categoryRepository.save(category);
         categories = categoryRepository.findAll();
     }
 
@@ -91,7 +96,7 @@ class BookServiceTest {
                 .description("Book Description 2")
                 .publicationYear(200)
                  .authors(List.of(author))
-                 .categories(List.of(categories.getFirst()))
+                 .categories(List.of(categories.get(0)))
                 .build();
 
         var book = bookService.create(bookDTO2);
