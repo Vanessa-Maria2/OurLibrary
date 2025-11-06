@@ -34,9 +34,6 @@ jobs:
         run: |
           mvn clean install -DskipTests
           mvn test
-
-      - name: Run tests
-        run: mvn test
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
